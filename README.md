@@ -1,5 +1,6 @@
 # HogeCollector
- some hoge game
+ needs arcade to run:
+ 'pip install arcade'
 
 collect hoge tokens in the fastest times
 
