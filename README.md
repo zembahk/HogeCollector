@@ -1,0 +1,2 @@
+# HogeCollector
+ some hoge game
