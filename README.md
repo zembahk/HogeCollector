@@ -14,7 +14,7 @@ exit splash screen
 
 pay to play and pool buy ins
 
-have a ticker that resets every day and rewards the top scores in hoge
+have a ticker that resets every hour that rewards the top scores in hoge
 
 have it give the devs a small % of the pool on payouts
 
