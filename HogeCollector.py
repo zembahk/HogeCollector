@@ -66,7 +66,7 @@ class MyGame(arcade.Window):
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
 
-        for i in range(50):
+        for i in range(100):
 
             # Instantiate gold coins
             coin = arcade.Sprite("images/hoge_coin.png", SPRITE_SCALING / 2)
@@ -141,7 +141,7 @@ class MyGame(arcade.Window):
             coin.kill()
             self.score += 1
 
-        if self.score == 50 and self.win_time == 0: 
+        if self.score == 100 and self.win_time == 0: 
             self.win_time = self.total_time
 
             
