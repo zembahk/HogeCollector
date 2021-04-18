@@ -103,9 +103,11 @@ class MyGame(arcade.Window):
 
         # Figure out our output
         output = f"Time: {seconds:02d}"
+        # zemabhk edit
         winTime = f"Won in {self.win_time:.6f} seconds"
         
         # Output the timer text.
+        # zembahk edit
         if self.win_time == 0:
             arcade.draw_text(output, 10, 50, arcade.color.WHITE, 18)
         else:
@@ -141,6 +143,7 @@ class MyGame(arcade.Window):
             coin.kill()
             self.score += 1
 
+        # zembahk edit
         if self.score == 100 and self.win_time == 0: 
             self.win_time = self.total_time
 
