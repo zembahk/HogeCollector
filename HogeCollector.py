@@ -2,6 +2,7 @@
 import random
 import arcade
 import os
+import tkinter
 
 SPRITE_SCALING = 0.5
 
@@ -103,9 +104,11 @@ class MyGame(arcade.Window):
 
         # Figure out our output
         output = f"Time: {seconds:02d}"
+        # zemabhk edit
         winTime = f"Won in {self.win_time:.6f} seconds"
         
         # Output the timer text.
+        # zembahk edit
         if self.win_time == 0:
             arcade.draw_text(output, 10, 50, arcade.color.WHITE, 18)
         else:
@@ -115,10 +118,9 @@ class MyGame(arcade.Window):
         """
         All the logic to move, and the game logic goes here.
         """
-        if self.win_time == 0:
-            self.total_time += delta_time
-        else:
-            self.total_time = self.win_time
+
+        self.total_time += delta_time
+
 
     def on_mouse_motion(self, x, y, dx, dy):
         """
@@ -141,9 +143,9 @@ class MyGame(arcade.Window):
             coin.kill()
             self.score += 1
 
+        # zembahk edit
         if self.score == 100 and self.win_time == 0: 
             self.win_time = self.total_time
-
             
 
 def main():
