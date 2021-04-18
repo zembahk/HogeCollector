@@ -40,8 +40,18 @@ class MyGame(arcade.Window):
         # Set background color
         arcade.set_background_color(arcade.color.AMAZON)
 
+        # zembahk edit
+        self.total_time = 0.0
+
+
     def setup(self):
         """ Set the value of the variable """
+        # zembahk edit
+        self.total_time = 0.0
+        self.win_time = 0.0
+
+
+        
         # Assign values ​​to background variables
         self.background = arcade.load_texture("images/background.jpg")
 
@@ -87,6 +97,29 @@ class MyGame(arcade.Window):
         # Draw text 
         arcade.draw_text(f"Score: {self.score}", 10, 20, arcade.color.WHITE, 14)
 
+
+        # Calculate seconds by using a modulus (remainder)
+        seconds = int(self.total_time) % 60
+
+        # Figure out our output
+        output = f"Time: {seconds:02d}"
+        winTime = f"Won in {self.win_time:.6f} seconds"
+        
+        # Output the timer text.
+        if self.win_time == 0:
+            arcade.draw_text(output, 10, 50, arcade.color.WHITE, 18)
+        else:
+            arcade.draw_text(winTime, 10, 100, arcade.color.WHITE, 26)
+            
+    def on_update(self, delta_time):
+        """
+        All the logic to move, and the game logic goes here.
+        """
+        if self.win_time == 0:
+            self.total_time += delta_time
+        else:
+            self.total_time = self.win_time
+
     def on_mouse_motion(self, x, y, dx, dy):
         """
         Mouse movement event
@@ -108,6 +141,10 @@ class MyGame(arcade.Window):
             coin.kill()
             self.score += 1
 
+        if self.score == 50 and self.win_time == 0: 
+            self.win_time = self.total_time
+
+            
 
 def main():
     """ Main method """
