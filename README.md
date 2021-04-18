@@ -8,7 +8,7 @@ score board
 
 hoge wallet integration
 
-exit slash screen
+exit splash screen
 
 # ideas
 
