@@ -52,7 +52,7 @@ class MyGame(arcade.Window):
         """ Set the value of the variable """
         # zembahk edit
 
-        self.total_time = 0.0
+        self.total_time = -3.0
         self.win_time = 0.0
 
 
@@ -92,9 +92,6 @@ class MyGame(arcade.Window):
             self.coin_list.append(coin)
             
 
-	
-
-
     def on_draw(self):
         """
         Render screen
@@ -106,30 +103,43 @@ class MyGame(arcade.Window):
         # Draw a textured rectangle 
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
 
-        
+        # Draw title box in the middle of the screen.
+        if self.total_time < 0:
+            output = "HOGE COLLECTOR"
+            arcade.draw_text(output, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.3, arcade.color.WHITE, 36, width=400, align="center", anchor_x="center", anchor_y="center")
 
-        # Draw all characters
-        self.coin_list.draw()
-        self.player_list.draw()
+            if self.total_time < -2:
+                arcade.draw_text("3", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5, arcade.color.WHITE, 54, width=75, align="center", anchor_x="center", anchor_y="center")
+            if self.total_time > -2 and self.total_time < -1:
+                arcade.draw_text("2", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5, arcade.color.WHITE, 54, width=75, align="center", anchor_x="center", anchor_y="center")
+            if self.total_time > -1 and self.total_time < 0:
+                arcade.draw_text("1", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5, arcade.color.WHITE, 54, width=75, align="center", anchor_x="center", anchor_y="center")
 
-        # Draw text 
-        arcade.draw_text(f"Score: {self.score}", 10, 20, arcade.color.WHITE, 14)
-
-
-        # Calculate seconds by using a modulus (remainder)
-        seconds = int(self.total_time) % 60
-
-        # Figure out our output
-        output = f"Time: {seconds:02d}"
-        # zemabhk edit
-        winTime = f"Won in {self.win_time:.6f} seconds"
-        
-        # Output the timer text.
-        # zembahk edit
-        if self.win_time == 0:
-            arcade.draw_text(output, 10, 50, arcade.color.WHITE, 18)
         else:
-            arcade.draw_text(winTime, 10, 100, arcade.color.WHITE, 26)
+            
+
+            # Draw all characters
+            self.coin_list.draw()
+            self.player_list.draw()
+
+            # Draw text 
+            arcade.draw_text(f"Score: {self.score}", 10, 20, arcade.color.WHITE, 14)
+
+
+            # Calculate seconds by using a modulus (remainder)
+            seconds = int(self.total_time) % 60
+
+            # Figure out our output
+            output = f"Time: {seconds:02d}"
+            # zemabhk edit
+            winTime = f"Won in {self.win_time:.6f} seconds"
+        
+            # Output the timer text.
+            # zembahk edit
+            if self.win_time == 0:
+                arcade.draw_text(output, 10, 50, arcade.color.WHITE, 18)
+            else:
+                arcade.draw_text(winTime, 10, 50, arcade.color.WHITE, 26)
             
     def on_update(self, delta_time):
         """
@@ -182,7 +192,6 @@ def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    #arcade.schedule(coins, 1 / 80)
     arcade.run()
 
 
