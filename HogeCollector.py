@@ -2,7 +2,7 @@
 import random
 import arcade
 import os
-import time
+
 
 SPRITE_AVATAR_SCALING = 0.125
 SPRITE_COIN_SCALING = 0.25
@@ -45,18 +45,13 @@ class MyGame(arcade.Window):
         arcade.set_background_color(arcade.color.AMAZON)
 
         # zembahk edit
-        self.total_time = 0.0
-
-
-    def setup(self):
-        """ Set the value of the variable """
-        # zembahk edit
-
         self.total_time = -3.0
         self.win_time = 0.0
 
 
-        
+    def setup(self):
+        """ Set the value of the variable """
+       
         # Assign values ​​to background variables
         self.background = arcade.load_texture("images/background.jpg")
 
@@ -148,7 +143,9 @@ class MyGame(arcade.Window):
 
         self.total_time += delta_time
 
-
+        if self.win_time > 0 and self.total_time - self.win_time > 2:
+            arcade.close_window()
+            
     def on_mouse_motion(self, x, y, dx, dy):
         """
         Mouse movement event
@@ -188,12 +185,21 @@ class MyGame(arcade.Window):
             self.win_time = self.total_time
             
 
-def main():
+def play():
     """ Main method """
+    
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
     arcade.run()
 
 
 if __name__ == "__main__":
-    main()
+    while True:
+        play()
+        answer = input("Restart?(y/n)  ")
+        if answer == 'y':
+            
+            continue
+        else:
+            break
+    
