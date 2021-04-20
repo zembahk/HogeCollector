@@ -8,7 +8,6 @@ SPRITE_AVATAR_SCALING = 0.125
 SPRITE_COIN_SCALING = 0.25
 
 
-EDGE_BUFFER = 50
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Hoge coin collecting game"
@@ -47,6 +46,7 @@ class MyGame(arcade.Window):
         # zembahk edit
         self.total_time = -3.0
         self.win_time = 0.0
+        self.win_txt = "you won"
 
 
     def setup(self):
@@ -72,8 +72,8 @@ class MyGame(arcade.Window):
             coin = arcade.Sprite("images/hoge_coin.png", SPRITE_COIN_SCALING)
 
             # Place gold coins
-            coin.center_x = random.randrange(EDGE_BUFFER, SCREEN_WIDTH - EDGE_BUFFER)
-            coin.center_y = random.randrange(EDGE_BUFFER, SCREEN_HEIGHT - EDGE_BUFFER)
+            coin.center_x = random.randrange(coin.width, SCREEN_WIDTH - coin.width)
+            coin.center_y = random.randrange(coin.height, SCREEN_HEIGHT - coin.height)
 
             # Give direction
             coin.delta_x = random.randrange(-200, 200)
@@ -127,14 +127,14 @@ class MyGame(arcade.Window):
             # Figure out our output
             output = f"Time: {seconds:.2f}"
             # zemabhk edit
-            winTime = f"Won in {self.win_time:.6f} seconds"
+            self.win_txt = f"Won in {self.win_time:.6f} seconds"
         
             # Output the timer text.
             # zembahk edit
             if self.win_time == 0:
                 arcade.draw_text(output, 10, 50, arcade.color.WHITE, 18)
             else:
-                arcade.draw_text(winTime, 10, 50, arcade.color.WHITE, 26)
+                arcade.draw_text(self.win_txt, 10, 50, arcade.color.WHITE, 26)
             
     def on_update(self, delta_time):
         """
@@ -145,7 +145,7 @@ class MyGame(arcade.Window):
 
         if self.win_time > 0 and self.total_time - self.win_time > 2:
             arcade.close_window()
-            
+            #return self.win_txt
     def on_mouse_motion(self, x, y, dx, dy):
         """
         Mouse movement event
@@ -165,9 +165,9 @@ class MyGame(arcade.Window):
             coin.center_y += coin.delta_y * delta_time
 
             # Figure out if we hit the edge and need to reverse.
-            if coin.center_x < 10  or coin.center_x > SCREEN_WIDTH - 10:
+            if coin.center_x < coin.width // 2  or coin.center_x > SCREEN_WIDTH - coin.width // 2:
                 coin.delta_x *= -1
-            if coin.center_y < 10 or coin.center_y > SCREEN_HEIGHT - 10:
+            if coin.center_y < coin.height or coin.center_y > SCREEN_HEIGHT - coin.height // 2:
                 coin.delta_y *= -1
 
 
@@ -194,12 +194,13 @@ def play():
 
 
 if __name__ == "__main__":
-    while True:
+    #while True:
         play()
-        answer = input("Restart?(y/n)  ")
-        if answer == 'y':
+        #print(MyGame.win_time)
+        #answer = input("Restart?(y/n)  ")
+        #if answer == 'y':
             
-            continue
-        else:
-            break
+           # continue
+       # else:
+          #  break
     
