@@ -127,10 +127,10 @@ class MyGame(arcade.Window):
 
 
             # Calculate seconds by using a modulus (remainder)
-            seconds = int(self.total_time) % 60
+            seconds = float(self.total_time) % 60
 
             # Figure out our output
-            output = f"Time: {seconds:02d}"
+            output = f"Time: {seconds:.2f}"
             # zemabhk edit
             winTime = f"Won in {self.win_time:.6f} seconds"
         
