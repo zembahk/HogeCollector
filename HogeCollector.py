@@ -72,8 +72,8 @@ class MyGame(arcade.Window):
             coin = arcade.Sprite("images/hoge_coin.png", SPRITE_COIN_SCALING)
 
             # Place gold coins
-            coin.center_x = random.randrange(coin.width, SCREEN_WIDTH - coin.width)
-            coin.center_y = random.randrange(coin.height, SCREEN_HEIGHT - coin.height)
+            coin.center_x = random.randrange((coin.width + 150), SCREEN_WIDTH - (coin.width + 150))
+            coin.center_y = random.randrange((coin.height + 150), SCREEN_HEIGHT - (coin.height + 150))
 
             # Give direction
             coin.delta_x = random.randrange(-200, 200)
