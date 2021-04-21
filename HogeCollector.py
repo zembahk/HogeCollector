@@ -76,13 +76,20 @@ class MyGame(arcade.Window):
             coin.center_y = random.randrange((coin.height + 150), SCREEN_HEIGHT - (coin.height + 150))
 
             # Give direction
-            coin.delta_x = random.randrange(-200, 200)
-            coin.delta_y = random.randrange(-200, 200)
-            
+            coin_slowest = 30
+            coin_fastest = 350
+            while True:
+                coin.delta_x = random.randrange(coin_fastest * -1, coin_fastest)
+                coin.delta_y = random.randrange(coin_fastest * -1, coin_fastest)
+                if (coin.delta_x > coin_slowest or coin.delta_x < coin_slowest * -1) and (coin.delta_y > coin_slowest or coin.delta_y < coin_slowest * -1):
+                    break
+                
             # Set up the initial angle, and the "spin"
             coin.angle = random.randrange(360)
-            coin.change_angle = random.randrange(-5, 6)
-
+            while True:
+                coin.change_angle = random.randrange(-2, 7)
+                if coin.change_angle > 1 or coin.change_angle < -0.5:
+                    break
             # Add gold coins to the list
             self.coin_list.append(coin)
             
@@ -161,16 +168,16 @@ class MyGame(arcade.Window):
         coin_left = len(self.coin_list)
         for i in range(0, coin_left):
             coin = self.coin_list[i]
-            coin.center_x += coin.delta_x * delta_time
-            coin.center_y += coin.delta_y * delta_time
-
+            
             # Figure out if we hit the edge and need to reverse.
-            if coin.center_x < coin.width // 2  or coin.center_x > SCREEN_WIDTH - coin.width // 2:
+            wall_buffer = 5
+            if coin.center_x < coin.width // 2 + wall_buffer or coin.center_x > SCREEN_WIDTH - coin.width // 2 - wall_buffer:
                 coin.delta_x *= -1
-            if coin.center_y < coin.height or coin.center_y > SCREEN_HEIGHT - coin.height // 2:
+            if coin.center_y < coin.height // 2 + wall_buffer or coin.center_y > SCREEN_HEIGHT - coin.height // 2 - wall_buffer:
                 coin.delta_y *= -1
 
-
+            coin.center_x += coin.delta_x * delta_time
+            coin.center_y += coin.delta_y * delta_time
 
         # Collision detection between player and gold coin
         hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
