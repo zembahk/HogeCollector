@@ -1,4 +1,5 @@
-
+import subprocess
+import sys
 import random
 import arcade
 import os
@@ -201,8 +202,12 @@ class MyGame(arcade.Window):
         # zembahk edit
         if self.score == 100 and self.win_time == 0: 
             self.win_time = self.total_time
-            
 
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+        
 def play():
     """ Main method """
     
@@ -212,13 +217,5 @@ def play():
 
 
 if __name__ == "__main__":
-    #while True:
-        play()
-        #print(MyGame.win_time)
-        #answer = input("Restart?(y/n)  ")
-        #if answer == 'y':
-            
-           # continue
-       # else:
-          #  break
-    
+    install('arcade')
+    play()
