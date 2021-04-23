@@ -1,9 +1,17 @@
-
-import random
-import arcade
+import subprocess
+import sys
 import os
+import random
 
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
+try:
+    import arcade
+except error_value:
+    install('arcade')
+    import arcade
+    
 SPRITE_AVATAR_SCALING = 0.125
 SPRITE_COIN_SCALING = 0.25
 
@@ -201,7 +209,7 @@ class MyGame(arcade.Window):
         # zembahk edit
         if self.score == 100 and self.win_time == 0: 
             self.win_time = self.total_time
-            
+
 
 def play():
     """ Main method """
@@ -212,13 +220,5 @@ def play():
 
 
 if __name__ == "__main__":
-    #while True:
-        play()
-        #print(MyGame.win_time)
-        #answer = input("Restart?(y/n)  ")
-        #if answer == 'y':
-            
-           # continue
-       # else:
-          #  break
     
+    play()
