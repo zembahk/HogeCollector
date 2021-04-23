@@ -46,11 +46,14 @@ class MyGame(arcade.Window):
         # zembahk edit
         self.total_time = -3.0
         self.win_time = 0.0
-        self.win_txt = "you won"
-
+        self.win_txt = "You Won!"
+        self.restart_wait = 1.0
 
     def setup(self):
         """ Set the value of the variable """
+
+        self.total_time = -3.0
+        self.win_time = 0.0
        
         # Assign values ​​to background variables
         self.background = arcade.load_texture("images/background.jpg")
@@ -140,8 +143,19 @@ class MyGame(arcade.Window):
             # zembahk edit
             if self.win_time == 0:
                 arcade.draw_text(output, 10, 50, arcade.color.WHITE, 18)
+            elif self.win_time != 0 and self.total_time - self.win_time > self.restart_wait:
+                arcade.draw_text(f"{self.win_time:.6f}", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.3, arcade.color.WHITE, 64, align="center", anchor_x="center", anchor_y="center")
+                arcade.draw_text("Press Space To Restart", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 5, arcade.color.WHITE, 26, align="center", anchor_x="center", anchor_y="center")
             else:
                 arcade.draw_text(self.win_txt, 10, 50, arcade.color.WHITE, 26)
+
+
+    def on_key_press(self, key, key_modifiers):
+        """
+        Called whenever a key on the keyboard is pressed.
+        """
+        if self.win_time != 0 and key == 32 and self.total_time - self.win_time > self.restart_wait:
+                self.setup()
             
     def on_update(self, delta_time):
         """
@@ -149,10 +163,7 @@ class MyGame(arcade.Window):
         """
 
         self.total_time += delta_time
-
-        if self.win_time > 0 and self.total_time - self.win_time > 2:
-            arcade.close_window()
-            #return self.win_txt
+             
     def on_mouse_motion(self, x, y, dx, dy):
         """
         Mouse movement event
