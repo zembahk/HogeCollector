@@ -8,9 +8,12 @@ def install(package):
 
 try:
     import arcade
-except error_value:
-    install('arcade')
-    import arcade
+except:
+    try:
+        install('arcade')
+        import arcade
+    except Exception as e:
+        print("Error: %s</p>" % str(e) )
     
 SPRITE_AVATAR_SCALING = 0.125
 SPRITE_COIN_SCALING = 0.25
