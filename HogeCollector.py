@@ -1,8 +1,7 @@
-import os
-import random
 import subprocess
 import sys
-
+import os
+import random
 
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
@@ -10,11 +9,8 @@ def install(package):
 try:
     import arcade
 except:
-    try:
-        install('arcade')
-        import arcade
-    except Exception as e:
-        print("Error: %s</p>" % str(e) )
+    install('arcade')
+    import arcade
     
 SPRITE_AVATAR_SCALING = 0.125
 SPRITE_COIN_SCALING = 0.25
@@ -77,8 +73,8 @@ class MyGame(arcade.Window):
         # Set player character
         self.score = 0
         self.player_sprite = arcade.Sprite("images/character.png", SPRITE_AVATAR_SCALING)
-        self.player_sprite.center_x = 50
-        self.player_sprite.center_y = 50
+        self.player_sprite.center_x = SCREEN_WIDTH // 2
+        self.player_sprite.center_y = SCREEN_HEIGHT // 2
         self.player_list.append(self.player_sprite)
 
         for i in range(100):
@@ -124,7 +120,7 @@ class MyGame(arcade.Window):
         if self.total_time < 0:
             output = "HOGE COLLECTOR"
             arcade.draw_text(output, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.3, arcade.color.WHITE, 36, width=400, align="center", anchor_x="center", anchor_y="center")
-
+            self.player_list.draw()
             if self.total_time < -2:
                 arcade.draw_text("3", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5, arcade.color.WHITE, 54, width=75, align="center", anchor_x="center", anchor_y="center")
             if self.total_time > -2 and self.total_time < -1:
@@ -134,7 +130,6 @@ class MyGame(arcade.Window):
 
         else:
             
-
             # Draw all characters
             self.coin_list.draw()
             self.player_list.draw()
@@ -157,10 +152,16 @@ class MyGame(arcade.Window):
                 arcade.draw_text(output, 10, 50, arcade.color.WHITE, 18)
             elif self.win_time != 0 and self.total_time - self.win_time > self.restart_wait:
                 arcade.draw_text(f"{self.win_time:.6f}", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.3, arcade.color.WHITE, 64, align="center", anchor_x="center", anchor_y="center")
-                arcade.draw_text("Press Space To Restart", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 5, arcade.color.WHITE, 26, align="center", anchor_x="center", anchor_y="center")
+                arcade.draw_text("Press Space or Click", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 5, arcade.color.WHITE, 26, align="center", anchor_x="center", anchor_y="center")
             else:
                 arcade.draw_text(self.win_txt, 10, 50, arcade.color.WHITE, 26)
 
+    def on_mouse_press(self, x, y, button, modifiers): 
+        """
+        Called whenever the mouse button is clicked.
+        """
+        if self.win_time != 0 and self.total_time - self.win_time > self.restart_wait:
+            self.setup()
 
     def on_key_press(self, key, key_modifiers):
         """
@@ -194,9 +195,9 @@ class MyGame(arcade.Window):
             
             # Figure out if we hit the edge and need to reverse.
             wall_buffer = 5
-            if coin.center_x < coin.width // 2 + wall_buffer or coin.center_x > SCREEN_WIDTH - coin.width // 2 - wall_buffer:
+            if coin.center_x < (coin.width // 2) + wall_buffer or coin.center_x > SCREEN_WIDTH - (coin.width // 2) - wall_buffer:
                 coin.delta_x *= -1
-            if coin.center_y < coin.height // 2 + wall_buffer or coin.center_y > SCREEN_HEIGHT - coin.height // 2 - wall_buffer:
+            if coin.center_y < (coin.height // 2) + wall_buffer or coin.center_y > SCREEN_HEIGHT - (coin.height // 2) - wall_buffer:
                 coin.delta_y *= -1
 
             coin.center_x += coin.delta_x * delta_time
