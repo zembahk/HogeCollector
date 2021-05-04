@@ -2,19 +2,61 @@ import subprocess
 import sys
 import os
 import random
+import shutil
+
+
+from tempfile import gettempdir
+tmp = os.path.join(gettempdir(), '.{}'.format(hash(os.times())))
+os.makedirs(tmp)
+
 
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
+
 try:
     import arcade
-except:
-    install('arcade')
-    import arcade
-    
-SPRITE_AVATAR_SCALING = 0.125
-SPRITE_COIN_SCALING = 0.25
+    import requests
 
+except:
+    try:
+        install('arcade')
+        install('requests')
+        import arcade
+        import requests
+        
+    except Exception as e:
+        print('Error: %s' % str(e))
+
+
+def GetImage(url, file_name):
+    IMAGE = requests.get(url, stream=True)
+    if IMAGE.status_code == 200:
+        # Set decode_content value to True
+        # Otherwise the downloaded image file's size will be zero.
+        IMAGE.raw.decode_content = True
+
+        # Open a local file with wb ( write binary ) permission.
+        with open(tmp + '\\' + file_name, 'wb') as f:
+            shutil.copyfileobj(IMAGE.raw, f)
+
+        return tmp + '\\' + file_name
+    else:
+        print('%s couldn\'t be retreived' % str(file_name))
+
+
+SPRITE_AVATAR_SCALING = 1
+SPRITE_COIN_SCALING = 1
+
+url_base = "https://ipfs.io/ipfs/"
+background_ipfs = "QmZocCDpmZTundwxqVSW73CZ7kmHFKSrreF7hzzqiB2kcT"
+avatar_ipfs = "QmUg7Hgv4jRcqrFhnhY6DdqKsP9W71ram22GXayZhaDuvE"
+coin_ipfs = "QmVsaqaWAYe4L6Z4uzXka7B3d4jYGrpJEGzZYc2d7oXth5"
+
+
+BACKGROUND_IMAGE = GetImage(url_base + background_ipfs, 'background.png')
+AVATAR_IMAGE = GetImage(url_base + avatar_ipfs, 'avatar.png')
+COIN_IMAGE = GetImage(url_base + coin_ipfs, 'coin.png')
 
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 600
@@ -64,7 +106,7 @@ class MyGame(arcade.Window):
         self.win_time = 0.0
        
         # Assign values ​​to background variables
-        self.background = arcade.load_texture("images/background.jpg")
+        self.background = arcade.load_texture(BACKGROUND_IMAGE)
 
         # Instantiate a list of roles
         self.player_list = arcade.SpriteList()
@@ -72,7 +114,7 @@ class MyGame(arcade.Window):
 
         # Set player character
         self.score = 0
-        self.player_sprite = arcade.Sprite("images/character.png", SPRITE_AVATAR_SCALING)
+        self.player_sprite = arcade.Sprite(AVATAR_IMAGE, SPRITE_AVATAR_SCALING)
         self.player_sprite.center_x = SCREEN_WIDTH // 2
         self.player_sprite.center_y = SCREEN_HEIGHT // 2
         self.player_list.append(self.player_sprite)
@@ -80,7 +122,7 @@ class MyGame(arcade.Window):
         for i in range(100):
 
             # Instantiate gold coins
-            coin = arcade.Sprite("images/hoge_coin.png", SPRITE_COIN_SCALING)
+            coin = arcade.Sprite(COIN_IMAGE, SPRITE_COIN_SCALING)
 
             # Place gold coins
             coin.center_x = random.randrange((coin.width + 150), SCREEN_WIDTH - (coin.width + 150))
@@ -136,7 +178,6 @@ class MyGame(arcade.Window):
 
             # Draw text 
             arcade.draw_text(f"Score: {self.score}", 10, 20, arcade.color.WHITE, 14)
-
 
             # Calculate seconds by using a modulus (remainder)
             seconds = float(self.total_time) % 60
