@@ -7,11 +7,12 @@ import shutil
 
 from tempfile import gettempdir
 tmp = os.path.join(gettempdir(), '.{}'.format(hash(os.times())))
-os.makedirs(tmp)
+if not os.path.exists(tmp):
+    os.makedirs(tmp)
 
 
 def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
 
 
 try:
@@ -24,7 +25,7 @@ except:
         install('requests')
         import arcade
         import requests
-        
+
     except Exception as e:
         print('Error: %s' % str(e))
 
@@ -48,10 +49,10 @@ def GetImage(url, file_name):
 SPRITE_AVATAR_SCALING = 1
 SPRITE_COIN_SCALING = 1
 
-url_base = "https://ipfs.io/ipfs/"
-background_ipfs = "QmZocCDpmZTundwxqVSW73CZ7kmHFKSrreF7hzzqiB2kcT"
-avatar_ipfs = "QmUg7Hgv4jRcqrFhnhY6DdqKsP9W71ram22GXayZhaDuvE"
-coin_ipfs = "QmVsaqaWAYe4L6Z4uzXka7B3d4jYGrpJEGzZYc2d7oXth5"
+url_base = 'https://ipfs.io/ipfs/'
+background_ipfs = 'QmZocCDpmZTundwxqVSW73CZ7kmHFKSrreF7hzzqiB2kcT'
+avatar_ipfs = 'QmUg7Hgv4jRcqrFhnhY6DdqKsP9W71ram22GXayZhaDuvE'
+coin_ipfs = 'QmVsaqaWAYe4L6Z4uzXka7B3d4jYGrpJEGzZYc2d7oXth5'
 
 
 BACKGROUND_IMAGE = GetImage(url_base + background_ipfs, 'background.png')
@@ -60,7 +61,7 @@ COIN_IMAGE = GetImage(url_base + coin_ipfs, 'coin.png')
 
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Hoge coin collecting game"
+SCREEN_TITLE = 'Hoge coin collecting game'
 
 
 class MyGame(arcade.Window):
@@ -96,7 +97,7 @@ class MyGame(arcade.Window):
         # zembahk edit
         self.total_time = -3.0
         self.win_time = 0.0
-        self.win_txt = "You Won!"
+        self.win_txt = 'You Won!'
         self.restart_wait = 1.0
 
     def setup(self):
@@ -104,7 +105,7 @@ class MyGame(arcade.Window):
 
         self.total_time = -3.0
         self.win_time = 0.0
-       
+
         # Assign values ​​to background variables
         self.background = arcade.load_texture(BACKGROUND_IMAGE)
 
@@ -136,7 +137,7 @@ class MyGame(arcade.Window):
                 coin.delta_y = random.randrange(coin_fastest * -1, coin_fastest)
                 if (coin.delta_x > coin_slowest or coin.delta_x < coin_slowest * -1) and (coin.delta_y > coin_slowest or coin.delta_y < coin_slowest * -1):
                     break
-                
+
             # Set up the initial angle, and the "spin"
             coin.angle = random.randrange(360)
             while True:
@@ -145,7 +146,6 @@ class MyGame(arcade.Window):
                     break
             # Add gold coins to the list
             self.coin_list.append(coin)
-            
 
     def on_draw(self):
         """
@@ -155,49 +155,49 @@ class MyGame(arcade.Window):
         # Start rendering screen
         arcade.start_render()
 
-        # Draw a textured rectangle 
+        # Draw a textured rectangle
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
 
         # Draw title box in the middle of the screen.
         if self.total_time < 0:
-            output = "HOGE COLLECTOR"
-            arcade.draw_text(output, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.3, arcade.color.WHITE, 36, width=400, align="center", anchor_x="center", anchor_y="center")
+            output = 'HOGE COLLECTOR'
+            arcade.draw_text(output, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.3, arcade.color.WHITE, 36, width=400, align='center', anchor_x='center', anchor_y='center')
             self.player_list.draw()
             if self.total_time < -2:
-                arcade.draw_text("3", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5, arcade.color.WHITE, 54, width=75, align="center", anchor_x="center", anchor_y="center")
+                arcade.draw_text('3', SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5, arcade.color.WHITE, 54, width=75, align='center', anchor_x='center', anchor_y='center')
             if self.total_time > -2 and self.total_time < -1:
-                arcade.draw_text("2", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5, arcade.color.WHITE, 54, width=75, align="center", anchor_x="center", anchor_y="center")
+                arcade.draw_text('2', SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5, arcade.color.WHITE, 54, width=75, align='center', anchor_x='center', anchor_y='center')
             if self.total_time > -1 and self.total_time < 0:
-                arcade.draw_text("1", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5, arcade.color.WHITE, 54, width=75, align="center", anchor_x="center", anchor_y="center")
+                arcade.draw_text('1', SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5, arcade.color.WHITE, 54, width=75, align='center', anchor_x='center', anchor_y='center')
 
         else:
-            
+
             # Draw all characters
             self.coin_list.draw()
             self.player_list.draw()
 
             # Draw text 
-            arcade.draw_text(f"Score: {self.score}", 10, 20, arcade.color.WHITE, 14)
+            arcade.draw_text(f'Score: {self.score}', 10, 20, arcade.color.WHITE, 14)
 
             # Calculate seconds by using a modulus (remainder)
             seconds = float(self.total_time) % 60
 
             # Figure out our output
-            output = f"Time: {seconds:.2f}"
+            output = f'Time: {seconds:.2f}'
             # zemabhk edit
-            self.win_txt = f"Won in {self.win_time:.6f} seconds"
-        
+            self.win_txt = f'Won in {self.win_time:.6f} seconds'
+
             # Output the timer text.
             # zembahk edit
             if self.win_time == 0:
                 arcade.draw_text(output, 10, 50, arcade.color.WHITE, 18)
             elif self.win_time != 0 and self.total_time - self.win_time > self.restart_wait:
-                arcade.draw_text(f"{self.win_time:.6f}", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.3, arcade.color.WHITE, 64, align="center", anchor_x="center", anchor_y="center")
-                arcade.draw_text("Press Space or Click", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 5, arcade.color.WHITE, 26, align="center", anchor_x="center", anchor_y="center")
+                arcade.draw_text(f'{self.win_time:.6f}', SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.3, arcade.color.WHITE, 64, align='center', anchor_x='center', anchor_y='center')
+                arcade.draw_text('Press Space or Click', SCREEN_WIDTH // 2, SCREEN_HEIGHT // 5, arcade.color.WHITE, 26, align='center', anchor_x='center', anchor_y='center')
             else:
                 arcade.draw_text(self.win_txt, 10, 50, arcade.color.WHITE, 26)
 
-    def on_mouse_press(self, x, y, button, modifiers): 
+    def on_mouse_press(self, x, y, button, modifiers):
         """
         Called whenever the mouse button is clicked.
         """
@@ -209,15 +209,15 @@ class MyGame(arcade.Window):
         Called whenever a key on the keyboard is pressed.
         """
         if self.win_time != 0 and key == 32 and self.total_time - self.win_time > self.restart_wait:
-                self.setup()
-            
+            self.setup()
+
     def on_update(self, delta_time):
         """
         All the logic to move, and the game logic goes here.
         """
 
         self.total_time += delta_time
-             
+
     def on_mouse_motion(self, x, y, dx, dy):
         """
         Mouse movement event
@@ -233,7 +233,7 @@ class MyGame(arcade.Window):
         coin_left = len(self.coin_list)
         for i in range(0, coin_left):
             coin = self.coin_list[i]
-            
+
             # Figure out if we hit the edge and need to reverse.
             wall_buffer = 5
             if coin.center_x < (coin.width // 2) + wall_buffer or coin.center_x > SCREEN_WIDTH - (coin.width // 2) - wall_buffer:
@@ -253,18 +253,16 @@ class MyGame(arcade.Window):
             self.score += 1
 
         # zembahk edit
-        if self.score == 100 and self.win_time == 0: 
+        if self.score == 100 and self.win_time == 0:
             self.win_time = self.total_time
 
 
 def play():
     """ Main method """
-    
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
     arcade.run()
 
 
-if __name__ == "__main__":
-    
+if __name__ == '__main__':
     play()

