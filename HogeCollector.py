@@ -1,63 +1,8 @@
-import subprocess
-import sys
-import os
 import random
-import shutil
-
-
-from tempfile import gettempdir
-tmp = os.path.join(gettempdir(), '.{}'.format(hash(os.times())))
-if not os.path.exists(tmp):
-    os.makedirs(tmp)
-
-
-def install(package):
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
-
-
-try:
-    import arcade
-    import requests
-
-except:
-    try:
-        install('arcade')
-        install('requests')
-        import arcade
-        import requests
-
-    except Exception as e:
-        print('Error: %s' % str(e))
-
-
-def GetImage(url, file_name):
-    IMAGE = requests.get(url, stream=True)
-    if IMAGE.status_code == 200:
-        # Set decode_content value to True
-        # Otherwise the downloaded image file's size will be zero.
-        IMAGE.raw.decode_content = True
-
-        # Open a local file with wb ( write binary ) permission.
-        with open(tmp + '\\' + file_name, 'wb') as f:
-            shutil.copyfileobj(IMAGE.raw, f)
-
-        return tmp + '\\' + file_name
-    else:
-        print('%s couldn\'t be retreived' % str(file_name))
 
 
 SPRITE_AVATAR_SCALING = 1
 SPRITE_COIN_SCALING = 1
-
-url_base = 'https://ipfs.io/ipfs/'
-background_ipfs = 'QmZocCDpmZTundwxqVSW73CZ7kmHFKSrreF7hzzqiB2kcT'
-avatar_ipfs = 'QmUg7Hgv4jRcqrFhnhY6DdqKsP9W71ram22GXayZhaDuvE'
-coin_ipfs = 'QmVsaqaWAYe4L6Z4uzXka7B3d4jYGrpJEGzZYc2d7oXth5'
-
-
-BACKGROUND_IMAGE = GetImage(url_base + background_ipfs, 'background.png')
-AVATAR_IMAGE = GetImage(url_base + avatar_ipfs, 'avatar.png')
-COIN_IMAGE = GetImage(url_base + coin_ipfs, 'coin.png')
 
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 600
