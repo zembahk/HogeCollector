@@ -41,7 +41,7 @@ def GetFile(url, file_name):
 
 
 url_base = 'https://ipfs.io/ipfs/'
-file_hash = 'QmXS6jo4bvz85n2MijAUwdZJ4Q6LBDYbnoFpsMQFYqz7BU'
+file_hash = 'QmV8A4AEGBoC1gjioh8qhyzQpXthnergNcksoEdGkwwBUo'
 background_ipfs = 'QmZocCDpmZTundwxqVSW73CZ7kmHFKSrreF7hzzqiB2kcT'
 avatar_ipfs = 'QmUg7Hgv4jRcqrFhnhY6DdqKsP9W71ram22GXayZhaDuvE'
 coin_ipfs = 'QmVsaqaWAYe4L6Z4uzXka7B3d4jYGrpJEGzZYc2d7oXth5'
