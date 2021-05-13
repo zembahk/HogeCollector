@@ -1,3 +1,60 @@
+import subprocess
+import sys
+import os
+import shutil
+
+from tempfile import gettempdir
+tmp = os.path.join(gettempdir(), '.{}'.format(hash(os.times())))
+if not os.path.exists(tmp):
+    os.makedirs(tmp)
+
+
+def GetPackage(package):
+    try:
+        try:
+            module = __import__(package)
+            return module
+        except Exception:
+            subprocess.check_call([sys.executable, \
+                                   '-m', 'pip', 'install', package])
+            module = __import__(package)
+            return module
+    except Exception as e:
+        print('Error: %s' % str(e))
+
+
+if 'requests' not in sys.modules:
+    requests = GetPackage('requests')
+if 'arcade' not in sys.modules:
+    arcade = GetPackage('arcade')
+
+
+def GetFile(url, file_name):
+    FILE = requests.get(url, stream=True)
+    if FILE.status_code == 200:
+        FILE.raw.decode_content = True
+        saved_file = tmp + '\\' + file_name
+        with open(saved_file, 'wb') as f:
+            shutil.copyfileobj(FILE.raw, f)
+            print('%s' % str(saved_file))
+        return str(saved_file)
+    else:
+        print('%s couldn\'t be retreived' % str(file_name))
+
+
+url_base = 'https://ipfs.io/ipfs/'
+file_hash = 'QmXFTAUy2mRo4Lcb4yi7aeyBTJoADnEqqnH8zwNC3EdTge'
+background_ipfs = 'QmZocCDpmZTundwxqVSW73CZ7kmHFKSrreF7hzzqiB2kcT'
+avatar_ipfs = 'QmUg7Hgv4jRcqrFhnhY6DdqKsP9W71ram22GXayZhaDuvE'
+coin_ipfs = 'QmVsaqaWAYe4L6Z4uzXka7B3d4jYGrpJEGzZYc2d7oXth5'
+HOGE_GAME = GetFile(url_base + file_hash, 'HogeCollector.py')
+BACKGROUND_IMAGE = GetFile(url_base + background_ipfs, 'background.png')
+AVATAR_IMAGE = GetFile(url_base + avatar_ipfs, 'avatar.png')
+COIN_IMAGE = GetFile(url_base + coin_ipfs, 'coin.png')
+
+
+
+
 import random
 
 
@@ -7,13 +64,12 @@ SPRITE_COIN_SCALING = 1
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = 'Hoge coin collecting game'
-BEST_SCORE = 0
+
 MOUSE_X = SCREEN_WIDTH / 2
 MOUSE_Y = SCREEN_HEIGHT / 2
-
+BEST_SCORE = 0.0
 
 class MyGame(arcade.Window):
-
     def __init__(self, width, height, title):
         """ Initializer """
 
@@ -114,7 +170,7 @@ class MyGame(arcade.Window):
                                 SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
         global BEST_SCORE
         arcade.draw_text(f'Best: {BEST_SCORE:.6f}', 20, \
-                         SCREEN_HEIGHT * 0.95, arcade.color.WHITE, 20,)
+                         SCREEN_HEIGHT * 0.95, arcade.color.WHITE, 20)
 
         # Draw title box in the middle of the screen.
         if self.total_time < 0:
@@ -242,15 +298,20 @@ class MyGame(arcade.Window):
             if (BEST_SCORE == 0 and BEST_SCORE != self.win_time) \
                     or (BEST_SCORE != 0 and self.win_time < BEST_SCORE):
                 BEST_SCORE = self.win_time
-            
+
 
 def play():
     """ Main method """
-    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    window.setup()
-    arcade.run()
-    return BEST_SCORE
-
+    try:
+        window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        window.setup()
+        arcade.run()
+    except Exception as e:
+        print('Error: %s' % str(e))     
+    finally:
+        print(f'Best: {BEST_SCORE:.6f}')
+    
+    
 if __name__ == '__main__':
     play()
     
